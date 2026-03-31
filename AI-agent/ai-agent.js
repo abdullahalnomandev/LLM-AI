@@ -1,5 +1,4 @@
 const OpenAI = require('openai');
-const { InputTokens } = require('openai/resources/responses/input-tokens.js');
 require('dotenv').config()
 
 const openai = new OpenAI({
@@ -9,7 +8,7 @@ const openai = new OpenAI({
 
 async function main() {
   const completion = await openai.chat.completions.create({
-    model: "stepfun/step-3.5-flash:free",
+    model: "gpt-4o-mini",
     messages: [
       { role: "user", content: "What is react?" }
     ],
@@ -29,7 +28,7 @@ const anaLizeGoal = async () => {
    Create a list of tasks.
 
 
-   Return as json with this structure
+   Return as object with this structure
    
    example.
    
@@ -48,10 +47,18 @@ const anaLizeGoal = async () => {
   try {
 
     const completion = await openai.chat.completions.create({
-      model: "stepfun/step-3.5-flash:free",
+      model: "openai/gpt-4o-mini",
       messages: [
-        { role: "user", content: prompt }
+        {
+          role: "system",
+          content: "You are an expart learning and teaching assistant. Create a plan to learn and master a skill in 5 steps."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
       ],
+      temperature: 0.7
     })
     console.log(completion.choices[0].message)
   } catch (error) {
